@@ -34,7 +34,7 @@ CREATE TABLE public.topics (
 	"game_id" bigint NOT NULL,
 	"pros_cons" varchar NOT NULL,
     "topic" varchar NOT NULL,
-    "description" varchar NOT NULL,
+  	"description" varchar NOT NULL,
 	CONSTRAINT "topics_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

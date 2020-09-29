@@ -3,18 +3,77 @@ const db = require('../models/model');
 
 module.exports = {
 
-  
-  createGame(req, res, next) {
-    
+
+  async createGame(req, res, next) {
+    console.log('req body', req.body);
+    const { game_title, user_id } = req.body;
+    const createGameQuery = `INSERT INTO games (game_title, user_id) VALUES ($1, $2)`;
+    const values = [game_title, user_id];
+    try {
+      await db.query(createGameQuery, values);
+      return next();
+    } catch (err) {
+      if (err) return next(err);
+    }
   },
 
-  getGames(req, res, next) {
-    
+  async editGame(req, res, next) {
+    const { id } = req.body;
+    const editGameQuery = `UPDATE games SET game_title=$1 WHERE id=$1`;
+    const values = [id];
+    try {
+      await db.query(editGameQuery, values);
+      return next();
+    } catch (err) {
+      if (err) return next(err);
+    }
   },
 
-  getTopics(req, res, next) {
-    
+  async getGames(req, res, next) {
+    const { user } = req.cookies;
+    const gameQuery = `SELECT * FROM games`;
+    try {
+      const result = await db.query(gameQuery);
+      res.locals.games = result.rows;
+      return next();
+    } catch (err) {
+      if (err) return next(err);
+    };
+  },
+
+  async getTopics(req, res, next) {
+    const { id } = req.params;
+    const topicQuery = `SELECT * FROM topics WHERE game_id=${id}`;
+    try {
+      const result = await db.query(topicQuery);
+      res.locals.topics = result.rows;
+      return next();
+    } catch (err) {
+      if (err) return next(err);
+    }
+  },
+
+  async createTopics(req, res, next) {
+    console.log('req body', req.body)
+    const { topics, id } = req.body;
+    const createTopicQuery = `INSERT INTO topics (game_id, pros_cons, topic, description) VALUES($1, $2, $3, $4)`;
+    topics.forEach(async (obj) => {
+      const { topic, pros_cons, description, game_id } = obj;
+      const values = [topic, pros_cons, description, game_id];
+      try {
+        await db.query(createTopicQuery, values);
+        return next();
+      } catch (err) {
+        if (err) return next();
+      }
+    });
   }
 
-
 };
+
+/* [{
+  topic: React,
+  pros_cons: pro,
+  text: "lots of resources",
+  game_id: 1
+}] */
