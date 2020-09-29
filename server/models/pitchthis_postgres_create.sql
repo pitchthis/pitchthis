@@ -9,11 +9,11 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+
 CREATE TABLE public.user (
 	"id" serial NOT NULL,
 	"username" varchar NOT NULL,
-	"email" varchar NOT NULL,
-	"password" varchar NOT NULL,
+	"avatar" varchar,
 	CONSTRAINT "user_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -28,7 +28,6 @@ CREATE TABLE public.games (
   OIDS=FALSE
 );
 
-DROP TABLE public.topics;
 
 CREATE TABLE public.topics (
 	"id" serial NOT NULL,
@@ -44,7 +43,7 @@ CREATE TABLE public.topics (
 ALTER TABLE public.games ADD CONSTRAINT "games_fk0" FOREIGN KEY ("user_id") REFERENCES public.user("id");
 ALTER TABLE public.topics ADD CONSTRAINT "topics_fk0" FOREIGN KEY ("game_id") REFERENCES  public.games("id");
 
-INSERT INTO public.user VALUES (1, 'blonjay123', 'blondjay123@gmail.com', 'blonjay123');
+INSERT INTO public.user VALUES (1, 'blondjay123@gmail.com', null);
 
 
 INSERT INTO public.games VALUES (1, 'sampleGame', 1);
@@ -57,8 +56,5 @@ INSERT INTO public.topics VALUES (5, 1, 'cons', 'React', 'Testing is hard');
 INSERT INTO public.topics VALUES (6, 1, 'cons', 'React', 'Prop drilling');
 
 -- SELECT * FROM "public"."user" 
-
-
 -- JOIN "public"."games" ON "public"."games"."user_id" = "public"."user"."id"
 -- JOIN "public"."topics" ON "public"."topics"."game_id" = "public"."games"."id";
-
