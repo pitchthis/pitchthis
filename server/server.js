@@ -5,6 +5,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const authController = require("./controllers/authController");
 const cookieController = require("./controllers/cookieController");
+
 const gamesController = require("./controllers/gamesController")
 
 require("dotenv").config();
@@ -39,6 +40,10 @@ app.get('/game/:id', gamesController.getTopics, (req, res) => {
 app.post('/topics', gamesController.createTopics, (req, res) => {
   res.status(200).send('Topics created')
   //eventually send back the topic obj
+
+app.get("/game", cookieController.hasCookie, (req, res) => {
+  // add middleware to check for SSID cookie
+  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
 });
 
 app.get(
