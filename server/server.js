@@ -7,7 +7,10 @@ const authController = require("./controllers/authController");
 const cookieController = require("./controllers/cookieController");
 const jwtDecode = require("jwt-decode");
 
+const gamesController = require("./controllers/gamesController")
+
 require("dotenv").config();
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -18,10 +21,31 @@ app.get("/login", authController.oauth, (req, res) => {
   return res.redirect(res.locals.url);
 });
 
+app.get("/loggedIn", cookieController.hasCookie, (req, res) => {
+  // add middleware to check for SSID cookie
+  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
+});
+
 app.get("/people", (req, res) => {
   const { email, name, picture } = jwtDecode(req.cookies.user);
   res.send({ email, name, picture });
+
+app.get("/game", gamesController.getGames, (req, res) => {
+  res.status(200).json(res.locals.games);
 });
+
+app.post('/game', gamesController.createGame, (req, res) => {
+  res.status(200).send("Game created...");
+});
+
+app.get('/game/:id', gamesController.getTopics, (req, res) => {
+  res.status(200).json(res.locals.topics);
+});
+
+app.post('/topics', gamesController.createTopics, (req, res) => {
+  res.status(200).send('Topics created')
+  //eventually send back the topic obj
+
 
 app.get(
   "/success",

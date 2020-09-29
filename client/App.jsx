@@ -8,7 +8,7 @@ const App = () => {
   return (
     <main>
       <Switch>
-        <Route path="/game" component={GameContainer} />
+        <Route path="/loggedIn" component={GameContainer} />
         <Route path="/" component={Login} exact />
       </Switch>
     </main>
