@@ -5,4 +5,9 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import "./assets/styles.scss";
 
-render(<App />, document.getElementById("root"));
+render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById("root")
+);
