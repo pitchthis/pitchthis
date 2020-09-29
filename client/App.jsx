@@ -1,7 +1,11 @@
 import React from "react";
-
+import Login from "./components/Login";
 const App = () => {
-  return <main>hi</main>;
+  return (
+    <main>
+      <Login />
+    </main>
+  );
 };
 
 export default App;
