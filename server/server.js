@@ -19,12 +19,8 @@ app.get("/login", authController.oauth, (req, res) => {
   return res.redirect(res.locals.url);
 });
 
-
-
 app.get("/game", gamesController.getGames, (req, res) => {
-  // add middleware to check for SSID cookie
   res.status(200).json(res.locals.games);
-  //res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
 });
 
 app.post('/game', gamesController.createGame, (req, res) => {
@@ -33,12 +29,15 @@ app.post('/game', gamesController.createGame, (req, res) => {
 
 app.get('/game/:id', gamesController.getTopics, (req, res) => {
   res.status(200).json(res.locals.topics);
-  //eventually send back the topic obj
 });
 
 app.post('/topics', gamesController.createTopics, (req, res) => {
   res.status(200).send('Topics created')
   //eventually send back the topic obj
+
+app.get("/loggedIn", cookieController.hasCookie, (req, res) => {
+  // add middleware to check for SSID cookie
+  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
 });
 
 app.get(
