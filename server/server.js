@@ -5,6 +5,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const authController = require("./controllers/authController");
 const cookieController = require("./controllers/cookieController");
+
 const gamesController = require("./controllers/gamesController")
 
 require("dotenv").config();
