@@ -4,7 +4,9 @@ import Link from "react-router-dom";
 const Login = () => {
   return (
     <div className="goog">
-      <a href="/login">login with google</a>
+      <a href="/login" className="button">
+        login with google
+      </a>
       {/* <Link to="/game">Game</Link> */}
     </div>
   );

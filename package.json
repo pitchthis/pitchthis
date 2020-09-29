@@ -19,9 +19,11 @@
   },
   "homepage": "https://github.com/akobrinsky/pitchthis#readme",
   "dependencies": {
+    "bulma": "^0.9.1",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "googleapis": "^60.0.1",
+    "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.0.0-beta.2",
     "react": "^16.13.1",
