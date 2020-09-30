@@ -29,6 +29,7 @@ const Lobby = () => {
       .then((res) => res.json())
       .then((res) => {
         console.log('Game detail', res)
+        // DISPATCH RESPONSE TO THE STORE
     });
     // Send the rout to gameRoom
   }
