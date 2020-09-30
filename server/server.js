@@ -29,6 +29,7 @@ app.get("/loggedIn", cookieController.hasCookie, (req, res) => {
 app.get("/people", (req, res) => {
   const { email, name, picture } = jwtDecode(req.cookies.user);
   res.send({ email, name, picture });
+});
 
 app.get("/game", gamesController.getGames, (req, res) => {
   res.status(200).json(res.locals.games);
@@ -45,7 +46,7 @@ app.get('/game/:id', gamesController.getTopics, (req, res) => {
 app.post('/topics', gamesController.createTopics, (req, res) => {
   res.status(200).send('Topics created')
   //eventually send back the topic obj
-
+});
 
 app.get(
   "/success",
@@ -54,14 +55,14 @@ app.get(
   cookieController.setSSIDcookie,
   (req, res) => {
     // redirect to a page that will then check if there is an SSID cookie called 'user' ()
-    res.status(200).redirect("/game");
+    res.status(200).redirect("/loggedIn");
   }
 );
 
-app.get("/game", cookieController.hasCookie, (req, res) => {
-  // add middleware to check for SSID cookie
-  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
-});
+// app.get("/game", cookieController.hasCookie, (req, res) => {
+//   // add middleware to check for SSID cookie
+//   res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
+// });
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
