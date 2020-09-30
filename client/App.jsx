@@ -1,10 +1,13 @@
 import React from "react";
+import { connect } from 'react-redux';
 import Login from "./components/Login";
 import GameContainer from "./components/GameContainer";
 import { Switch, Route } from "react-router-dom";
 import "./assets/styles.scss";
 
 const App = () => {
+
+
   return (
     <main>
       <Switch>
