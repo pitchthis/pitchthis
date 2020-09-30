@@ -41,6 +41,10 @@ app.get("/people", (req, res) => {
   res.send({ email, name, picture });
 });
 
+app.get("/game/:id", gamesController.getTopics, (req, res) => {
+  res.status(200).json(res.locals.topics);
+});
+
 app.get("/game", gamesController.getGames, (req, res) => {
   res.status(200).json(res.locals.games);
 });
