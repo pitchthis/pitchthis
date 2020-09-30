@@ -22,9 +22,14 @@ const Lobby = () => {
       });
   }, []);
 
-  const handleSubmit = (name, id) => {
+  const handleSubmit = (element, index) => {
     // Do a fetch to DB for the topics of this game, save said topics in the Store
     
+    fetch(`/game/${element.id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log('Game detail', res)
+    });
     // Send the rout to gameRoom
   }
 
@@ -32,7 +37,7 @@ const Lobby = () => {
     return (
       <div>
         <h3>{el.game_title}</h3>
-        <button className="button is-primary" onClick={handleSubmit(el, i)}>Select Game</button>
+        <button className="button is-primary" onClick={()=>{handleSubmit(el, i)}}>Select Game</button>
       </div>
     )
   })
