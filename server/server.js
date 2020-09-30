@@ -6,16 +6,26 @@ const cookieParser = require("cookie-parser");
 const authController = require("./controllers/authController");
 const cookieController = require("./controllers/cookieController");
 const jwtDecode = require("jwt-decode");
+const { createServer } = require("http");
+const socketio = require("socket.io");
+const server = createServer(app);
+// const socker = require("./socker");
+const io = socketio(server);
 
 const gamesController = require("./controllers/gamesController");
-
 require("dotenv").config();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+/*
+ * Server Static files
+ */
 app.use("/build", express.static(path.join(__dirname, "../build")));
-// app.use(express.static("client"));
+
+/*
+ * Routes/Endpoints
+ */
 
 app.get("/login", authController.oauth, (req, res) => {
   return res.redirect(res.locals.url);
@@ -35,19 +45,22 @@ app.get("/game", gamesController.getGames, (req, res) => {
   res.status(200).json(res.locals.games);
 });
 
-app.post("/game", gamesController.createGame, (req, res) => {
-  res.status(200).send("Game created...");
-});
+app.post(
+  "/game",
+  gamesController.createGame,
+  gamesController.createTopics,
+  (req, res) => {
+    res.status(200).send("Game created...");
+  }
+);
 
 app.get("/game/:id", gamesController.getTopics, (req, res) => {
   res.status(200).json(res.locals.topics);
 });
 
-app.post("/topics", gamesController.createTopics, (req, res) => {
-  res.status(200).send("Topics created");
-  //eventually send back the topic obj
-});
-
+/****************************************
+--------- OAuth Success Handler ---------
+ ****************************************/
 app.get(
   "/success",
   authController.onSuccess,
@@ -55,14 +68,9 @@ app.get(
   cookieController.setSSIDcookie,
   (req, res) => {
     // redirect to a page that will then check if there is an SSID cookie called 'user' ()
-    res.status(200).redirect("/game");
+    res.status(200).redirect("/loggedIn");
   }
 );
-
-app.get("/game", cookieController.hasCookie, (req, res) => {
-  // add middleware to check for SSID cookie
-  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
-});
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
@@ -80,6 +88,24 @@ app.use((err, req, res, next) => {
   return res.status(errorStatus).send("INTERNAL SERVER ERROR");
 });
 
+/**********************************************************************
+-----------------------   SOCKET.IO LOGIC   ---------------------------
+***********************************************************************/
+
+const rooms = {};
+const playersArray = [];
+io.on("connection", (socket) => {
+  console.log(socket.id);
+  socket.emit("message");
+  socket.on("join", (players) => {
+    console.log(players);
+    console.log(playersArray);
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);
+});
+server.listen(Number(PORT) + 1, () => {
+  console.log(`Api and socker whitelisted for BONJAY`);
 });

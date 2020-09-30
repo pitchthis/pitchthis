@@ -1,16 +1,15 @@
 const db = require('../models/model');
 
-
 module.exports = {
-
-
   async createGame(req, res, next) {
+    console.log('in create game');
     console.log('req body', req.body);
-    const { game_title, user_id } = req.body;
-    const createGameQuery = `INSERT INTO games (game_title, user_id) VALUES ($1, $2)`;
-    const values = [game_title, user_id];
+    const game_title = Object.keys(req.body)[0];
+    const createGameQuery = `INSERT INTO games (game_title, user_id) VALUES ($1, $2) RETURNING *`;
+    const values = [game_title, 1];
     try {
-      await db.query(createGameQuery, values);
+      const result = await db.query(createGameQuery, values);
+      res.locals.game_id = result.rows[0].id;
       return next();
     } catch (err) {
       if (err) return next(err);
@@ -38,7 +37,7 @@ module.exports = {
       return next();
     } catch (err) {
       if (err) return next(err);
-    };
+    }
   },
 
   async getTopics(req, res, next) {
@@ -54,21 +53,34 @@ module.exports = {
   },
 
   async createTopics(req, res, next) {
-    console.log('req body', req.body)
-    const { topics, id } = req.body;
+    console.log('in createTopics ')
+    const game_title = Object.keys(req.body)[0];
+    const topicName = Object.keys(req.body[game_title]);
+
     const createTopicQuery = `INSERT INTO topics (game_id, pros_cons, topic, description) VALUES($1, $2, $3, $4)`;
-    topics.forEach(async (obj) => {
-      const { topic, pros_cons, description, game_id } = obj;
-      const values = [topic, pros_cons, description, game_id];
+    const values = [];
+
+    for (const topic in req.body[game_title]) {
+      for (const procon in req.body[game_title][topic]) {
+        for (const description in req.body[game_title][topic][procon]) {
+          values.push([
+            res.locals.game_id,
+            procon,
+            topic,
+            req.body[game_title][topic][procon][description],
+          ]);
+        }
+      }
+    }
+    values.forEach(async (value) => {
       try {
-        await db.query(createTopicQuery, values);
-        return next();
+        await db.query(createTopicQuery, value);
       } catch (err) {
-        if (err) return next();
+        // if (err) return next(err);
       }
     });
-  }
-
+    return next();
+  },
 };
 
 /* [{

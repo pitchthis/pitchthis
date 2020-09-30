@@ -1,31 +1,76 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
+import { useDispatch, connect } from 'react-redux'
+import * as types from '../constants/actionTypes';
 import TopicBuilder from "./TopicBuilder";
 
+const mapStateToProps = state => {
+  console.log(state)
+  return { topicQuanity: state.games.topicQuanity, }
+}
+
+
+// useEffect(() => {
+//   e.preventDefault();
+//   document.querySelector('#topicContainer').appendChild(<TopicBuilder />);
+
+// });
+// if store incremented by one, add topic builder
 const GameBuilder = () => {
+  const [gameTitle, setGameTitle] = useState('')
+
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //   }
+  // }
+  // componentDidUpdate() {
+  //   console.log('INSIDE DID UPDATE', this.props)
+  //   if (topicArray.length < this.props.topicQuanity) topicArray.push(<TopicBuilder />)
+  // }
+  const dispatch = useDispatch()
+
+  const handleSubmit = () => {
+    // send dispatch to store w/ GAME TITLE.
+    // middle ware in store will assemble topics / pros/cons
+    dispatch({
+      type: types.CREATE_GAME, payload: gameTitle
+    })
+
+    // DO FETCH TO BACKEND with 
+
+  }
+
+
+  const handleChange = (e) => {
+    setGameTitle(e.target.value);
+  }
+
+  // dispatch({ type: types.ADD_TOPIC})
+  // useEffect(()=>{
+  // console.log(props)
+  // }, [])
+
+  const topicArray = [];
+  for (let i = 0; i < 10; i += 1) {
+    topicArray.push(<TopicBuilder key={i} />)
+  }
+
   return (
     <div className="container">
       <div className="field">
         <label className="label">Game Title:</label>
         <div className="control">
-          <input className="input" type="text" placeholder="Text input" />
+          <input onChange={handleChange} className="input" type="text" placeholder="Text input" />
         </div>
       </div>
-      <TopicBuilder />
-      <TopicBuilder />
-      <div className="field">
-        {/* <label className="label">Add Topic</label> */}
-        <div className="control is-flex mb-3">
-          <input className="input" type="text" placeholder="Text input" />
-          <button className="button is-success is-danger ml-3">
-            <span className="icon is-small">
-              <i className="fas fa-minus-circle"></i>
-            </span>
-          </button>
-        </div>
+      <div id="topicContainer">
+        {topicArray}
       </div>
-      <TopicBuilder />
+      <div className="control">
+        <button className="button is-primary" onClick={handleSubmit}>Submit</button>
+      </div>
     </div>
-  );
+  )
 };
 
-export default GameBuilder;
+export default connect(mapStateToProps)(GameBuilder);
