@@ -35,7 +35,7 @@ app.get("/game", gamesController.getGames, (req, res) => {
   res.status(200).json(res.locals.games);
 });
 
-app.post('/game', gamesController.createGame, (req, res) => {
+app.post('/game', gamesController.createGame, gamesController.createTopics, (req, res) => {
   res.status(200).send("Game created...");
 });
 
@@ -43,10 +43,6 @@ app.get('/game/:id', gamesController.getTopics, (req, res) => {
   res.status(200).json(res.locals.topics);
 });
 
-app.post('/topics', gamesController.createTopics, (req, res) => {
-  res.status(200).send('Topics created')
-  //eventually send back the topic obj
-});
 
 app.get(
   "/success",
