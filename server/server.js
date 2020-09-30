@@ -55,14 +55,14 @@ app.get(
   cookieController.setSSIDcookie,
   (req, res) => {
     // redirect to a page that will then check if there is an SSID cookie called 'user' ()
-    res.status(200).redirect("/game");
+    res.status(200).redirect("/loggedIn");
   }
 );
 
-app.get("/game", cookieController.hasCookie, (req, res) => {
-  // add middleware to check for SSID cookie
-  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
-});
+// app.get("/game", cookieController.hasCookie, (req, res) => {
+//   // add middleware to check for SSID cookie
+//   res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
+// });
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
