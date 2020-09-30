@@ -8,6 +8,7 @@ const initialState = {
   
   createGame: {},
   
+
   topics: {},
   
   pros: {},
@@ -22,24 +23,6 @@ const gameReducer = (state = initialState, action) => {
       return {
         ...state,
       };
-
-  // case types.ADD_TOPIC:
-  //   const newVal = state.topicQuantity + 1;
-  //   return {
-  //     ...state,
-  //     topicQuantity: newVal,
-  //   };
-
-  // case types.PROS:
-  //   console.log(state.pros)
-  //   return {
-  //     ...state,
-  //     topics: {
-  //       ...state.topics,
-  //       [action.payload]: true,
-  //     },
-  //   };
-
 
     case types.TOPIC:
       console.log(state.topics)
@@ -94,22 +77,22 @@ const gameReducer = (state = initialState, action) => {
         cons: {...conObj}
       };
 
-      case types.DELETE_PROS:
-        const deleteProTopic = action.payload.topic;
-        const newDeleteProsObj = {...state.pros};
-        // if state.pros[tpic]
-        // if (!newObj[topic]) {
-        //   newObj[topic] = [];
-        //   newObj[topic].push(action.payload.value);
-        // } else {
-        //   newObj[topic].push(action.payload.value);
-        // }
-        const indexOfDelete = newDeleteProsObj[deleteProTopic].indexOf(action.payload.value)
-        newDeleteProsObj[deleteProTopic].splice(indexOfDelete, 1);
-        return {
-          ...state,
-          pros: {...newDeleteProsObj}
-        };
+    case types.DELETE_PROS:
+      const deleteProTopic = action.payload.topic;
+      const newDeleteProsObj = {...state.pros};
+      // if state.pros[tpic]
+      // if (!newObj[topic]) {
+      //   newObj[topic] = [];
+      //   newObj[topic].push(action.payload.value);
+      // } else {
+      //   newObj[topic].push(action.payload.value);
+      // }
+      const indexOfDelete = newDeleteProsObj[deleteProTopic].indexOf(action.payload.value)
+      newDeleteProsObj[deleteProTopic].splice(indexOfDelete, 1);
+      return {
+        ...state,
+        pros: {...newDeleteProsObj}
+      };
 
     case types.DELETE_CONS:
       const deleteTopic = action.payload.topic;
@@ -125,26 +108,11 @@ const gameReducer = (state = initialState, action) => {
 
     case types.CREATE_GAME:
       
-      const topicObj = {
-        topic1: true,
-        topic2: true 
-      }
+      const gameName = action.payload;
 
-      const pros = {
-        topic1: ['its good', 'its great'],
-        topic2: ['its good', 'its great'],
-      }
+      const insertObj = {}
 
-      const cons = {
-        topic1: ['its bad', 'its worse'],
-        topic2: ['its bad', 'its worse'],
-      }
-
-      const insertObj = {
-        // topic1 : {pros: {1: 'its good'} cons:{1: 'its bad'}}
-      }
-
-      for (let key in topicObj) {
+      for (let key in state.topics) {
         // add key to insertObj
         // key is a topic
         insertObj[key] = {};
@@ -152,24 +120,43 @@ const gameReducer = (state = initialState, action) => {
         insertObj[key].pros = {} 
         insertObj[key].cons = {} 
 
-        pros[key].forEach((el, i)=>{
+        state.pros[key].forEach((el, i) => {
           insertObj[key].pros[i] = el;
         })
 
-        cons[key].forEach((el, i)=>{
+        state.cons[key].forEach((el, i) => {
           insertObj[key].cons[i] = el;
         })
       }     
     
       const final = {
-        [action.payload] : {
+        [gameName] : {
           ...insertObj
         }
       }
+
+
+        //       fetch('https://example.com/profile', {
+        //   method: 'POST', // or 'PUT'
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify(data),
+        // })
+  
+
+      // SEND FINAL IN A FETCH
+      fetch('/game', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(final),
+      })
       
       return {
         ...state,
-        createGame: action.payload,
+        createGame: final,
       }
 
     case types.TOPIC:

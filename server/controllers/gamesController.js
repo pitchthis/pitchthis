@@ -2,6 +2,7 @@ const db = require('../models/model');
 
 module.exports = {
   async createGame(req, res, next) {
+    console.log('in create game');
     console.log('req body', req.body);
     const game_title = Object.keys(req.body)[0];
     const createGameQuery = `INSERT INTO games (game_title, user_id) VALUES ($1, $2) RETURNING *`;
@@ -52,6 +53,7 @@ module.exports = {
   },
 
   async createTopics(req, res, next) {
+    console.log('in createTopics ')
     const game_title = Object.keys(req.body)[0];
     const topicName = Object.keys(req.body[game_title]);
 
