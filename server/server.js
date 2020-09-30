@@ -29,6 +29,7 @@ app.get("/loggedIn", cookieController.hasCookie, (req, res) => {
 app.get("/people", (req, res) => {
   const { email, name, picture } = jwtDecode(req.cookies.user);
   res.send({ email, name, picture });
+});
 
 app.get("/game", gamesController.getGames, (req, res) => {
   res.status(200).json(res.locals.games);
@@ -45,7 +46,7 @@ app.get('/game/:id', gamesController.getTopics, (req, res) => {
 app.post('/topics', gamesController.createTopics, (req, res) => {
   res.status(200).send('Topics created')
   //eventually send back the topic obj
-
+});
 
 app.get(
   "/success",
