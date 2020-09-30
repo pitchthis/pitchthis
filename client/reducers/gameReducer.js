@@ -5,9 +5,9 @@ const initialState = {
   score: 0,
   round: 0,
   topicQuantity: 1,
-  
+  currentGame: '',
   createGame: {},
-  
+  gameDetails: {},  
 
   topics: {},
   
@@ -159,14 +159,33 @@ const gameReducer = (state = initialState, action) => {
         createGame: final,
       }
 
+      
+    case types.GAME_DETAILS:
+      // const topicArr = action.payload;
+      // const gameDetailObj = {};
+
+      // topicArr.forEach((el)=>{
+      //   if (!gameDetailObj[el.topic]) {
+      //     gameDetailObj[el.topic] = {};
+      //     gameDetailObj[el.topic][]
+      //   }
+      // })
+
+      return {
+        ...state,
+        gameDetails: action.payload.detail,
+        currentGame: action.payload.title
+      }
+
+
     case types.TOPIC:
-    return {
-      ...state,
-      topics: {
-        ...state.topics,
-        [action.payload]: true,
-      },
-    }
+      return {
+        ...state,
+        topics: {
+          ...state.topics,
+          [action.payload]: true,
+        },
+      }
     
 
     default:

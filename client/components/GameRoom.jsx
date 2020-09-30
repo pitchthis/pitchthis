@@ -6,7 +6,7 @@ import * as types from '../constants/actionTypes';
 
 
 
-const Lobby = () => {
+const GameRoom = () => {
   
   const [user, setUser] = useState({});
   const [games, setGames] = useState([])
@@ -65,4 +65,4 @@ const Lobby = () => {
   );
 };
 
-export default Lobby;
+export default GameRoom;
