@@ -79,19 +79,48 @@ const gameReducer = (state = initialState, action) => {
 
       
     case types.UPDATE_CONS:
-      const topic2 = action.payload.topic;
-      console.log(topic2)
-      const newObj2 = {...state.cons};
+      const conTopic = action.payload.topic;
+      console.log(conTopic)
+      const conObj = {...state.cons};
       // if state.pros[tpic]
-      if (!newObj2[topic2]) {
-        newObj2[topic2] = [];
-        newObj2[topic2].push(action.payload.value);
+      if (!conObj[conTopic]) {
+        conObj[conTopic] = [];
+        conObj[conTopic].push(action.payload.value);
       } else {
-        newObj2[topic2].push(action.payload.value);
+        conObj[conTopic].push(action.payload.value);
       }
       return {
         ...state,
-        cons: {...newObj2}
+        cons: {...conObj}
+      };
+
+      case types.DELETE_PROS:
+        const deleteProTopic = action.payload.topic;
+        const newDeleteProsObj = {...state.pros};
+        // if state.pros[tpic]
+        // if (!newObj[topic]) {
+        //   newObj[topic] = [];
+        //   newObj[topic].push(action.payload.value);
+        // } else {
+        //   newObj[topic].push(action.payload.value);
+        // }
+        const indexOfDelete = newDeleteProsObj[deleteProTopic].indexOf(action.payload.value)
+        newDeleteProsObj[deleteProTopic].splice(indexOfDelete, 1);
+        return {
+          ...state,
+          pros: {...newDeleteProsObj}
+        };
+
+    case types.DELETE_CONS:
+      const deleteTopic = action.payload.topic;
+      const deleteConsObj = {...state.cons};
+
+      const indexOfDelete2 = deleteConsObj[deleteTopic].indexOf(action.payload.value)
+      deleteConsObj[deleteTopic].splice(indexOfDelete2, 1);
+
+      return {
+        ...state,
+        cons: {...deleteConsObj}
       };
 
     case types.CREATE_GAME:

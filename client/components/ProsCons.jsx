@@ -21,22 +21,40 @@ const ProsCons = (props) => {
     setToggleIcon(!toggleIcon)
     // dispatch to store!
     if (props.type === 'pros') {
-      console.log(props.type)
-      dispatch({ 
-        type: types.UPDATE_PROS, payload: {
-          topic: props.topic,
-          value: proConVal,
-        }
-       })
+      if (toggleIcon) {
+        dispatch({ 
+          type: types.UPDATE_PROS, payload: {
+            topic: props.topic,
+            value: proConVal,
+          }
+         })
+      } else {
+        dispatch({ 
+          type: types.DELETE_PROS, payload: {
+            topic: props.topic,
+            value: proConVal,
+          }
+         })
+      }
+  
       } else if (props.type === 'cons') {
         console.log('wow', props.type)
-
-      dispatch({ 
-        type: types.UPDATE_CONS, payload: {
-          topic: props.topic,
-          value: proConVal,
+        if (toggleIcon) {
+          dispatch({ 
+            type: types.UPDATE_CONS, payload: {
+              topic: props.topic,
+              value: proConVal,
+            }
+            })
+        } else {
+          dispatch({ 
+            type: types.DELETE_CONS, payload: {
+              topic: props.topic,
+              value: proConVal,
+            }
+            })
         }
-        })
+    
     }
   }
 

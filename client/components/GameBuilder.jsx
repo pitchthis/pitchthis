@@ -35,8 +35,10 @@ const mapStateToProps = state => {
   // }, [])
 
   render() {
-    const topicArray = [<TopicBuilder />, <TopicBuilder />, <TopicBuilder />, <TopicBuilder />, <TopicBuilder />, <TopicBuilder />, <TopicBuilder />, <TopicBuilder />, <TopicBuilder />, <TopicBuilder />];
-
+    const topicArray = [];
+    for (let i = 0; i < 10; i += 1) {
+      topicArray.push(<TopicBuilder key={i}/>)
+    }
 
   return (
     <div className="container">
