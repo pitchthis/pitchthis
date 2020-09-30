@@ -5,9 +5,10 @@ const initialState = {
   score: 0,
   round: 0,
   topicQuantity: 1,
-  createGame: {},
-  topics: {},
   
+  createGame: {},
+  
+  topics: {},
   
   pros: { topic1: 'pro1'},
   cons: { topic2: 'pro1'}
@@ -22,12 +23,45 @@ const gameReducer = (state = initialState, action) => {
         ...state,
       };
 
-    case types.ADD_TOPIC:
-      const newVal = state.topicQuantity + 1;
+  // case types.ADD_TOPIC:
+  //   const newVal = state.topicQuantity + 1;
+  //   return {
+  //     ...state,
+  //     topicQuantity: newVal,
+  //   };
+
+  case types.PROS:
+    console.log(state.pros)
+    return {
+      ...state,
+      topics: {
+        ...state.topics,
+        [action.payload]: true,
+      },
+    };
+
+
+    case types.TOPIC:
+      console.log(state.topics)
       return {
         ...state,
-        topicQuantity: newVal,
+        topics: {
+          ...state.topics,
+          [action.payload]: true,
+        },
       };
+
+    case types.DELETE_TOPIC:
+      const deleted = {...state.topics};
+      delete deleted[action.payload];
+
+      return {
+        ...state,
+        topics: {
+          ...deleted
+        },
+      };
+
 
     case types.CREATE_GAME:
       

@@ -19,7 +19,13 @@ const TopicBuilder = () => {
     setToggleIcon(!toggleIcon)
     dispatch({ type: types.ADD_TOPIC})
     
-    dispatch({ type: types.TOPIC})
+    if (toggleIcon) {
+      dispatch({ type: types.TOPIC, payload: input})
+    }
+    if (!toggleIcon) {
+      dispatch({ type: types.DELETE_TOPIC, payload: input})
+    }
+
 
     // dispatch to store!
     // render 5 Pros/Cons on click

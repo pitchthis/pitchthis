@@ -16,9 +16,16 @@ const ProsCons = (props) => {
 
     // render 5 Pros/Cons on click
   }
+
+  // Dispatch with action.types {topic: "React", text: 'this is good'}
+  // props.
+  //if props.type == pros, do the PRO dispatch
+
+  // props.topic
+
   const handlePros = (e) => {
-    console.log(e.target.value)
-    props.proConVal.push(e.target.value);
+    console.log(props.proConVal)
+    props.proArray.push(e.target.value);
   }
 
   return (
