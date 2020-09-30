@@ -25,8 +25,6 @@ const TopicBuilder = () => {
     if (!toggleIcon) {
       dispatch({ type: types.DELETE_TOPIC, payload: input})
     }
-
-
     // dispatch to store!
     // render 5 Pros/Cons on click
   }
@@ -54,8 +52,8 @@ const TopicBuilder = () => {
   }
 
   return (
-    <div>
-      <div className="field fieldTopic">
+    <div className="fieldTopic">
+      <div className="field">
         {/* <label className="label">Add Topic</label> */}
         <div className="control mb-3 is-flex">
           <label className="label">Topic:</label>
