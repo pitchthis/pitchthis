@@ -14,15 +14,18 @@ const App = () => {
   return (
     <main>
       <nav>
-        <div class="buttons are-small">
+        <div id="welcome">
+          Welcome To Pitch-It!
+        </div>
+        <div class="buttons are-small" id="buttons_id">
           <button class="button is-primary is-outlined is-light">
             <Link to="/">Home</Link>
           </button>
           <button class="button is-primary is-outlined is-light">
-            <Link to="/loggedIn">blah</Link>
+            <Link to="/loggedIn">Enter Room</Link>
           </button>
           <button class="button is-primary is-outlined is-light">
-            <Link to="/gamebuilder">gamebuild</Link>
+            <Link to="/gamebuilder">Make a Game</Link>
           </button>
         </div>
       </nav>

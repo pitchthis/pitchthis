@@ -117,6 +117,9 @@ io.on("connection", (socket) => {
     currentRoom.players.push(person);
     console.log(currentRoom.players);
     socket.emit("enter-game");
+
+    socket.emit("user-info", { name: person.name, index: currentRoom.players.length - 1, room });
+    io.to(room).emit("current-players", currentRoom.players);
   });
   socket.on("some-button", (data) => {
     console.log(data);
