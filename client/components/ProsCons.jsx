@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import * as types from '../constants/actionTypes';
-import { useDispatch } from 'react-redux'
-
+import * as types from "../constants/actionTypes";
+import { useDispatch } from "react-redux";
 
 const ProsCons = (props) => {
   // dispatch to store the 'e.target.value' if someone clicks plus sign, if click '-' sign we need to send dispatch to delete from store
@@ -9,77 +8,90 @@ const ProsCons = (props) => {
   //  topics = {react: true, graphQL: true}
   //}
 
-  const [toggleIcon, setToggleIcon] = useState(true)
-  const [proConVal, setProConVal] = useState('')
+  const [toggleIcon, setToggleIcon] = useState(true);
+  const [proConVal, setProConVal] = useState("");
 
-  
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-
-  console.log(toggleIcon)
+  console.log(toggleIcon);
   const handleClickToggle = () => {
-    setToggleIcon(!toggleIcon)
+    setToggleIcon(!toggleIcon);
     // dispatch to store!
-    if (props.type === 'pros') {
+    if (props.type === "pros") {
       if (toggleIcon) {
-        dispatch({ 
-          type: types.UPDATE_PROS, payload: {
+        dispatch({
+          type: types.UPDATE_PROS,
+          payload: {
             topic: props.topic,
             value: proConVal,
-          }
-         })
+          },
+        });
       } else {
-        dispatch({ 
-          type: types.DELETE_PROS, payload: {
+        dispatch({
+          type: types.DELETE_PROS,
+          payload: {
             topic: props.topic,
             value: proConVal,
-          }
-         })
+          },
+        });
       }
-  
-      } else if (props.type === 'cons') {
-        console.log('wow', props.type)
-        if (toggleIcon) {
-          dispatch({ 
-            type: types.UPDATE_CONS, payload: {
-              topic: props.topic,
-              value: proConVal,
-            }
-            })
-        } else {
-          dispatch({ 
-            type: types.DELETE_CONS, payload: {
-              topic: props.topic,
-              value: proConVal,
-            }
-            })
-        }
-    
+    } else if (props.type === "cons") {
+      console.log("wow", props.type);
+      if (toggleIcon) {
+        dispatch({
+          type: types.UPDATE_CONS,
+          payload: {
+            topic: props.topic,
+            value: proConVal,
+          },
+        });
+      } else {
+        dispatch({
+          type: types.DELETE_CONS,
+          payload: {
+            topic: props.topic,
+            value: proConVal,
+          },
+        });
+      }
     }
-  }
+  };
 
   const handlePros = (e) => {
     setProConVal(e.target.value);
-  }
+  };
 
   return (
     <div key={props.keyVal}>
       <div className="field is-block">
         {/* <label className="label">Add Topic</label> */}
         <div className="control is-flex mb-3">
-          <input className="input" type="text" placeholder="Text input" onChange={handlePros}/>
-          {toggleIcon &&
-            <button onClick={handleClickToggle} className="button is-success ml-3">
+          <input
+            className="input"
+            type="text"
+            placeholder="Text input"
+            onChange={handlePros}
+          />
+          {toggleIcon && (
+            <button
+              onClick={handleClickToggle}
+              className="button is-success ml-3"
+            >
               <span className="icon is-small">
                 <i className="fas fa-plus-circle"></i>
               </span>
-            </button>}
-          {!toggleIcon &&
-            <button onClick={handleClickToggle} className="button is-danger ml-3">
+            </button>
+          )}
+          {!toggleIcon && (
+            <button
+              onClick={handleClickToggle}
+              className="button is-danger ml-3"
+            >
               <span className="icon is-small">
                 <i className="fas fa-minus-circle"></i>
               </span>
-            </button>}
+            </button>
+          )}
         </div>
       </div>
     </div>
