@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import GameBuilder from "./GameBuilder";
-import { useDispatch } from 'react-redux'
-import * as types from '../constants/actionTypes';
-import { Link } from 'react-router-dom';
-
-
+import { useDispatch } from "react-redux";
+import * as types from "../constants/actionTypes";
+import { Link } from "react-router-dom";
+import JoinRoom from "./JoinRoom";
 
 const Lobby = ({ socket }) => {
   const [user, setUser] = useState({});
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
+  const [roomEntered, setRoomEntered] = useState(false);
   const [games, setGames] = useState([]);
-  const [room, setRoom] = useState("");
 
   useEffect(() => {
     fetch("/people")
@@ -26,14 +24,12 @@ const Lobby = ({ socket }) => {
       .then((res) => res.json())
       .then((res) => {
         setGames(res);
-          // console.log(res)
+        // console.log(res)
       });
   }, []);
 
-  socket.on("message", (data) => {
-    console.log("hi stan");
-    console.log(data);
-  });
+  // after joining... enter game
+
   const handleSubmit = (element, index) => {
     // Do a fetch to DB for the topics of this game, save said topics in the Store
 
@@ -42,54 +38,44 @@ const Lobby = ({ socket }) => {
       .then((res) => {
         console.log("Game detail", res);
         // DISPATCH RESPONSE TO THE STORE
-        dispatch({ type: types.GAME_DETAILS, payload: {title: element.game_title, detail: res}, })
-
+        dispatch({ type: types.GAME_DETAILS, payload: { title: element.game_title, detail: res } });
         // REDIRECT TO THE GAMEROOM
-
-    });
       });
     socket.emit("some-button", user.email);
     // Send the rout to gameRoom
   };
 
-  const handleRoomInput = (e) => {
-    setRoom(e.target.value);
-  };
-
-  const handleRoomClick = () => {
-    console.log(room);
-    socket.emit("new-room", { room, name: user.name });
-  };
   const gameArr = games.map((el, i) => {
     return (
       <div>
         <h3>{el.game_title}</h3>
-        <button className="button is-primary" onClick={()=>{handleSubmit(el, i)}}>
-          <Link to="/gameroom">Select Game</Link>
+        <button
+          className="button is-outlined is-primary is-light is-medium is-fullwidth"
+          onClick={() => {
+            handleSubmit(el, i);
+          }}
+        >
+          <Link to="/gameroom">{el.game_title}</Link>
         </button>
       </div>
     );
   });
 
-  return (
-    <div>
-      <div>Welcome {user.name}!!</div>
-      <div>Select a game to play:</div>
-      <div>{gameArr}</div>
-      <label className="label">Topic:</label>
-      <input
-        className="input"
-        type="text"
-        placeholder="Text input"
-        onChange={handleRoomInput}
-      />
-      <div className="control">
-        <button className="button is-primary" onClick={handleRoomClick}>
-          Submit
-        </button>
-      </div>{" "}
-    </div>
-  );
+  if (!roomEntered) {
+    return <JoinRoom socket={socket}/>;
+  } else {
+    return (
+      <div>
+        <div class="columns">
+          <div class="column is-one-third">Welcome {user.name}!!</div>
+          <div class="column">
+            <div>Select a game to play:</div>
+            <div>{gameArr}</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 };
 
 export default Lobby;

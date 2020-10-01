@@ -49,14 +49,9 @@ app.get("/game", gamesController.getGames, (req, res) => {
   res.status(200).json(res.locals.games);
 });
 
-app.post(
-  "/game",
-  gamesController.createGame,
-  gamesController.createTopics,
-  (req, res) => {
-    res.status(200).send("Game created...");
-  }
-);
+app.post("/game", gamesController.createGame, gamesController.createTopics, (req, res) => {
+  res.status(200).send("Game created...");
+});
 
 app.get("/game/:id", gamesController.getTopics, (req, res) => {
   res.status(200).json(res.locals.topics);
@@ -101,12 +96,27 @@ const playersArray = [];
 io.on("connection", (socket) => {
   console.log(socket.id);
   socket.emit("message", socket.id);
-  socket.on("join", (players) => {
-    console.log(players);
-  });
-  socket.on("new-room", (room) => {
-    console.log(room);
+  socket.on("new-room", ({ room, name }) => {
+    console.log(room, name);
     socket.join(room);
+
+    if (!rooms[room]) {
+      rooms[room] = {
+        players: [],
+        currentSpeaker: 0,
+      };
+    }
+    const currentRoom = rooms[room];
+
+    const person = {
+      name,
+      score: 0,
+      id: socket.id,
+    };
+
+    currentRoom.players.push(person);
+    console.log(currentRoom.players);
+    socket.emit("enter-game");
   });
   socket.on("some-button", (data) => {
     console.log(data);
