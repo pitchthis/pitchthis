@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const JoinRoom = () => {
+const JoinRoom = ({socket}) => {
   const [room, setRoom] = useState("");
   const [go, setGo] = useState(false);
 
