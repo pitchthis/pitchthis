@@ -18,9 +18,9 @@ const GameRoom = (props) => {
   const [topicIndex, setTopicIndex] = useState(0);
   const [topicKeys, setTopicKeys] = useState([]);
   const [gameStart, setGameStart] = useState(false);
-  const [gameOver, setGameOver] = useState(false)
+  const [gameOver, setGameOver] = useState(false);
 
-  console.log("PROPS", props);
+  console.log("PROPS socket", props.socket);
 
   // NEED A TOPIC AND ITS PROS/CONS
   // RANDOMIZE THE TOPIC THAT SHOWS, SET 1MIN SET INTERVAL, invokes a setState method that grabs new topic to render
@@ -31,6 +31,7 @@ const GameRoom = (props) => {
       console.log("props.gameDetail", props.gameDetails);
       setTopicKeys(Object.keys(props.gameDetails));
       // setTopicIndex(0);
+
     }
   }, [props.gameDetails]);
 
@@ -46,11 +47,14 @@ const GameRoom = (props) => {
     )  
   };
 
-
+  const disconnecter = () => {
+    props.socket.emit('disconnect-me');
+  }
 
   return (
     <div>
       <div>Game Room</div>
+      <button onClick={disconnecter}>disconnect</button>
       {(speaker && !gameStart) && (
         <>
           <div>YOU ARE THE SPEAKER</div>

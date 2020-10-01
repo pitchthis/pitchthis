@@ -131,7 +131,25 @@ io.on("connection", (socket) => {
     console.log(data);
     console.log("some button console", socket.id);
   });
+
+  socket.on('disconnect-me', () => {
+    // reset game if one player leaves
+    // const roomNames = Object.keys(rooms);
+    // for (let i = 0; i < roomNames.length; i += 1) {
+    //   const roomPlayers = rooms[roomNames[i]].players;
+    //   for (let j = 0; j < roomPlayers.length; j += 1) {
+    //     if (roomPlayers[j].socketid === socket.id) {
+    //       console.log(roomPlayers[j])
+    //       delete rooms[roomNames[i]].players.roomPlayers[j];
+    //       return;
+    //     }
+    //   }
+    // }
+    socket.disconnect();
+  });
 });
+
+
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);

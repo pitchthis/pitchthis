@@ -41,7 +41,7 @@ const GameContainer = ({ socket }) => {
   // }, currentPlayer);
   return (
     <div>
-      Game {user.name}!!
+      Build your game, {user.name}!!
       <div>
         <GameBuilder />
       </div>

@@ -8,7 +8,7 @@ const initialState = {
   currentGame: '',
   createGame: {},
   gameDetails: {},  
-
+  players: [],
   topics: {},
   
   pros: {},
@@ -32,6 +32,14 @@ const gameReducer = (state = initialState, action) => {
           ...state.topics,
           [action.payload]: true,
         },
+      };
+    case types.ADD_PLAYER:
+      console.log(state.players)
+      return {
+        ...state,
+        players: [
+          ...action.payload
+        ]
       };
 
     case types.DELETE_TOPIC:
