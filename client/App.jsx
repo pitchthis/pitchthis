@@ -5,7 +5,6 @@ import GameContainer from "./components/GameContainer";
 import Lobby from "./components/Lobby";
 import GameRoom from "./components/GameRoom";
 
-
 import { Switch, Route, Link } from "react-router-dom";
 import "./assets/styles.scss";
 import io from "socket.io-client";
@@ -15,19 +14,20 @@ const App = () => {
   return (
     <main>
       <nav>
-        <ul>
-          <li>
+        <div class="buttons are-small">
+          <button class="button is-primary is-outlined is-light">
             <Link to="/">Home</Link>
-          </li>
-          <li>
+          </button>
+          <button class="button is-primary is-outlined is-light">
             <Link to="/loggedIn">blah</Link>
-          </li>
-          <li>
+          </button>
+          <button class="button is-primary is-outlined is-light">
             <Link to="/gamebuilder">gamebuild</Link>
-          </li>
-        </ul>
+          </button>
+        </div>
       </nav>
       <Switch>
+        {/* <Route path="/join" component={() => <JoinRoom socket={socket} />} /> */}
         <Route path="/loggedIn" component={() => <Lobby socket={socket} />} />
         <Route
           path="/gamebuilder"

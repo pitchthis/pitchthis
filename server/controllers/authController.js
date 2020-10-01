@@ -40,7 +40,6 @@ authController.onSuccess = async (req, res, next) => {
       avatar: decoded.picture,
     };
     res.locals.person = person;
-    console.log("Decoded", decoded);
     return next();
   } else {
     res.send("Please login");
