@@ -36,6 +36,12 @@ app.get("/loggedIn", cookieController.hasCookie, (req, res) => {
   res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
 });
 
+app.get("/gameroom", cookieController.hasCookie, (req, res) => {
+  // add middleware to check for SSID cookie
+  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
+});
+
+
 app.get("/people", (req, res) => {
   const { email, name, picture } = jwtDecode(req.cookies.user);
   res.send({ email, name, picture });

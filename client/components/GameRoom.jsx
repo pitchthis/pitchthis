@@ -15,9 +15,10 @@ const GameRoom = (props) => {
   console.log("GAME ROOM", props);
   const dispatch = useDispatch();
   const [speaker, setSpeaker] = useState(true);
-  const [topicIndex, setTopicIndex] = useState(false);
+  const [topicIndex, setTopicIndex] = useState(0);
   const [topicKeys, setTopicKeys] = useState([]);
   const [gameStart, setGameStart] = useState(false);
+  const [gameOver, setGameOver] = useState(false)
 
   console.log("PROPS", props);
 
@@ -33,60 +34,43 @@ const GameRoom = (props) => {
     }
   }, [props.gameDetails]);
 
-  // useEffect(() => {
-  //   // topicKeys will have 'React' etc
-  //   // generated a random value and set
-  //   // if (topicKeys[topicIndex] !== undefined) {
-  //   if (topicIndex < topicKeys.length + 1) {
-  //     setTimeout(() => {
-  //       setTopicIndex(topicIndex + 1);
-  //     }, 5000);
-  //   }
-
-  //   // }
-  // }, [topicIndex]);
 
   const startTime = () => {
     setGameStart(true);
-    if (topicIndex === false) {
-      setTopicIndex(-1);
-    }
-    if (topicIndex < topicKeys.length + 1) {
-      setTimeout(() => {
-        setTopicIndex(topicIndex + 1);
-      }, 5000);
-    }
+  
+    const random = Math.floor(Math.random()*(topicKeys.length-1))
+    setTopicIndex(random)
+
+    setTimeout(()=>{
+      setGameStart(false)}, 5000
+    )  
   };
+
+
 
   return (
     <div>
       <div>Game Room</div>
-      {speaker && (
+      {(speaker && !gameStart) && (
         <>
           <div>YOU ARE THE SPEAKER</div>
           <button onClick={startTime}>START THE TIMER!!!!</button>
         </>
       )}
-      {speaker && topicKeys[topicIndex] && (
+      {(speaker && !gameOver) && (gameStart && (
         <>
           <div>Current topic is:</div>
           <div>{topicKeys[topicIndex]}</div>
         </>
-      )}
-      {speaker && !topicKeys[topicIndex] && gameStart && <div>Game over!!!</div>}
+      ))}
+      {/* {(speaker && gameOver) && (gameStart && <div>End Round!!!</div>)} */}
 
-      {!speaker && topicKeys[0] && (
-        <>
-          <div>YOU ARE THE SPEAKER</div>
-          <div>Current topic is:</div>
-          {topicKeys[topicIndex] && (
-            <>
-              <div>{topicKeys[topicIndex]}</div>
-            </>
-          )}
-          {!topicKeys[topicIndex] && <div>Game over!!!</div>}
-        </>
+
+
+      {!speaker && (
+        <div>YOU ARE THE AUDIENCE</div>
       )}
+  
     </div>
   );
 };
