@@ -15,9 +15,10 @@ const GameRoom = (props) => {
   console.log("GAME ROOM", props);
   const dispatch = useDispatch();
   const [speaker, setSpeaker] = useState(true);
-  const [topicIndex, setTopicIndex] = useState(false);
+  const [topicIndex, setTopicIndex] = useState(0);
   const [topicKeys, setTopicKeys] = useState([]);
   const [gameStart, setGameStart] = useState(false);
+  const [gameOver, setGameOver] = useState(false)
 
   console.log("PROPS", props);
 
@@ -46,47 +47,72 @@ const GameRoom = (props) => {
   //   // }
   // }, [topicIndex]);
 
+  // const miniFunc = () => {
+  //   setTimeout(()=>{
+  //     setGameOver(true)}, 10000
+  //   )
+  // }
+
   const startTime = () => {
     setGameStart(true);
-    if (topicIndex === false) {
-      setTopicIndex(-1);
-    }
-    if (topicIndex < topicKeys.length + 1) {
-      setTimeout(() => {
-        setTopicIndex(topicIndex + 1);
-      }, 5000);
-    }
+    // if (topicIndex === false) {
+    //   setTopicIndex(-1);
+    // }
+    // setTimeout(()=>{
+    //   setTopicIndex(topicIndex + 1), 5000
+    // })
+    const random = Math.floor(Math.random()*(topicKeys.length-1))
+    setTopicIndex(random)
+
+   
+    setTimeout(()=>{
+      setGameStart(false)}, 5000
+    )  
+    // console.log('topicIndex', topicIndex)
+
+    // let newIndex = topicIndex;
+
+    // if (topicIndex === 0) {
+    //   setTimeout(()=>{
+    //     setTopicIndex(newIndex + 1)
+    //     startTime()
+    //   }, 3000)
+    // } else {
+    //   setTopicIndex(5)
+    //   setTimeout(startTime, 3000)
+    // }
   };
+
+  // useEffect(()=>{
+  //   console.log(topicIndex)
+  //   setTimeout(()=>{
+  //     setTopicIndex(topicIndex + 1), 3000
+  //   })
+  // }, [topicIndex])
 
   return (
     <div>
       <div>Game Room</div>
-      {speaker && (
+      {(speaker && !gameStart) && (
         <>
           <div>YOU ARE THE SPEAKER</div>
           <button onClick={startTime}>START THE TIMER!!!!</button>
         </>
       )}
-      {speaker && topicKeys[topicIndex] && (
+      {(speaker && !gameOver) && (gameStart && (
         <>
           <div>Current topic is:</div>
           <div>{topicKeys[topicIndex]}</div>
         </>
-      )}
-      {speaker && !topicKeys[topicIndex] && gameStart && <div>Game over!!!</div>}
+      ))}
+      {(speaker && gameOver) && (gameStart && <div>End Round!!!</div>)}
 
-      {!speaker && topicKeys[0] && (
-        <>
-          <div>YOU ARE THE SPEAKER</div>
-          <div>Current topic is:</div>
-          {topicKeys[topicIndex] && (
-            <>
-              <div>{topicKeys[topicIndex]}</div>
-            </>
-          )}
-          {!topicKeys[topicIndex] && <div>Game over!!!</div>}
-        </>
+
+
+      {!speaker && (
+        <div>YOU ARE THE AUDIENCE</div>
       )}
+  
     </div>
   );
 };
