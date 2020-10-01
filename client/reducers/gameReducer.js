@@ -170,10 +170,25 @@ const gameReducer = (state = initialState, action) => {
       //     gameDetailObj[el.topic][]
       //   }
       // })
+      const payloadData = [...action.payload.detail];
+      const gameObj = {};
+      payloadData.forEach((el)=>{
+        if (!gameObj[el.topic]) {
+          // create a topic
+          gameObj[el.topic] = {
+            pros: [],
+            cons: []
+          }
+          gameObj[el.topic][el.pros_cons].push(el.description)
+        } else {
+          gameObj[el.topic][el.pros_cons].push(el.description)
+        }
+      })
+      console.log(gameObj)
 
       return {
         ...state,
-        gameDetails: action.payload.detail,
+        gameDetails: gameObj,
         currentGame: action.payload.title
       }
 

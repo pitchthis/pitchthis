@@ -1,68 +1,52 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import GameBuilder from "./GameBuilder";
-import { useDispatch } from 'react-redux'
+import { useDispatch, connect } from 'react-redux'
 import * as types from '../constants/actionTypes';
 
 
+const mapStateToProps = state => {
+  return { 
+    gameDetail: state.games.gameDetails, 
+    currentGame: state.games.currentGame,
+  }
+}
 
-const GameRoom = () => {
+const GameRoom = (props) => {
   
-  const [user, setUser] = useState({});
-  const [games, setGames] = useState([])
+  console.log('GAME ROOM', props)
   const dispatch = useDispatch()
+  const [speaker, setSpeaker] = useState(false);
+  const [topic, setTopic] = useState(0);
+  const [topicKeys, setTopicKeys] = useState({})
 
+  
+  console.log('PROPS', props)
+
+
+  // NEED A TOPIC AND ITS PROS/CONS
+  // RANDOMIZE THE TOPIC THAT SHOWS, SET 1MIN SET INTERVAL, invokes a setState method that grabs new topic to render
 
   useEffect(() => {
-    fetch("/people")
-      .then((res) => res.json())
-      .then((res) => {
-        setUser(res);
-      });
-    
-    fetch("/game")
-      .then((res) => res.json())
-      .then((res) => {
-        setGames(res);
-          // console.log(res)
-      });
-  }, []);
+    console.log('PROPS-useEffect', props)
 
-  const handleSubmit = (element, index) => {
-    // Do a fetch to DB for the topics of this game, save said topics in the Store
-    
-    fetch(`/game/${element.id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log('Game detail', res)
-        // DISPATCH RESPONSE TO THE STORE
-        dispatch({ type: types.GAME_DETAILS, payload: {title: element.game_title, detail: res}, })
+  }, [props.gameDetail]);
 
-        // REDIRECT TO THE GAMEROOM
-
-    });
-    // Send the rout to gameRoom
-  }
-
-  const gameArr = games.map((el,i)=>{
-    return (
-      <div>
-        <h3>{el.game_title}</h3>
-        <button className="button is-primary" onClick={()=>{handleSubmit(el, i)}}>Select Game</button>
-      </div>
-    )
-  })
+ 
   
 
   return (
     <div>
-      <div>
-        Welcome {user.name}!!
-      </div>
-      <div>Select a game to play:</div>
-      <div>{gameArr}</div>
+      <div>Game Room</div>
+      {speaker && 
+        <>
+        <div>YOU ARE THE SPEAKER</div>
+        <div>Current topic is : {props.gameDetail[topicKeys[topic]]}</div>
+        </>
+      }
+      
     </div>
   );
 };
 
-export default GameRoom;
+export default connect(mapStateToProps)(GameRoom);

@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import GameBuilder from "./GameBuilder";
 import { useDispatch } from 'react-redux'
 import * as types from '../constants/actionTypes';
+import { Link } from 'react-router-dom';
 
 
 
@@ -48,7 +49,9 @@ const Lobby = () => {
     return (
       <div>
         <h3>{el.game_title}</h3>
-        <button className="button is-primary" onClick={()=>{handleSubmit(el, i)}}>Select Game</button>
+        <button className="button is-primary" onClick={()=>{handleSubmit(el, i)}}>
+          <Link to="/gameroom">Select Game</Link>
+        </button>
       </div>
     )
   })
