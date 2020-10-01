@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import GameBuilder from "./GameBuilder";
-import Link from "react-router-dom";
+import { useDispatch } from 'react-redux'
+import * as types from '../constants/actionTypes';
+import { Link } from 'react-router-dom';
+
+
 
 const Lobby = ({ socket }) => {
   const [user, setUser] = useState({});
+  const dispatch = useDispatch()
+
   const [games, setGames] = useState([]);
   const [room, setRoom] = useState("");
 
@@ -20,7 +26,7 @@ const Lobby = ({ socket }) => {
       .then((res) => res.json())
       .then((res) => {
         setGames(res);
-        console.log(res);
+          // console.log(res)
       });
   }, []);
 
@@ -36,6 +42,11 @@ const Lobby = ({ socket }) => {
       .then((res) => {
         console.log("Game detail", res);
         // DISPATCH RESPONSE TO THE STORE
+        dispatch({ type: types.GAME_DETAILS, payload: {title: element.game_title, detail: res}, })
+
+        // REDIRECT TO THE GAMEROOM
+
+    });
       });
     socket.emit("some-button", user.email);
     // Send the rout to gameRoom
@@ -53,13 +64,8 @@ const Lobby = ({ socket }) => {
     return (
       <div>
         <h3>{el.game_title}</h3>
-        <button
-          className="button is-primary"
-          onClick={() => {
-            handleSubmit(el, i);
-          }}
-        >
-          Select Game
+        <button className="button is-primary" onClick={()=>{handleSubmit(el, i)}}>
+          <Link to="/gameroom">Select Game</Link>
         </button>
       </div>
     );

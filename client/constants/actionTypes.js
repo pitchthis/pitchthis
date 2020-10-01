@@ -8,5 +8,6 @@ export const UPDATE_CONS = 'UPDATE_CONS';
 export const DELETE_PROS = 'DELETE_PROS';
 export const DELETE_CONS = 'DELETE_CONS';
 
+export const GAME_DETAILS = 'GAME_DETAILS';
 
 

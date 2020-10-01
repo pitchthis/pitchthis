@@ -5,9 +5,9 @@ const initialState = {
   score: 0,
   round: 0,
   topicQuantity: 1,
-  
+  currentGame: '',
   createGame: {},
-  
+  gameDetails: {},  
 
   topics: {},
   
@@ -159,14 +159,48 @@ const gameReducer = (state = initialState, action) => {
         createGame: final,
       }
 
+      
+    case types.GAME_DETAILS:
+      // const topicArr = action.payload;
+      // const gameDetailObj = {};
+
+      // topicArr.forEach((el)=>{
+      //   if (!gameDetailObj[el.topic]) {
+      //     gameDetailObj[el.topic] = {};
+      //     gameDetailObj[el.topic][]
+      //   }
+      // })
+      const payloadData = [...action.payload.detail];
+      const gameObj = {};
+      payloadData.forEach((el)=>{
+        if (!gameObj[el.topic]) {
+          // create a topic
+          gameObj[el.topic] = {
+            pros: [],
+            cons: []
+          }
+          gameObj[el.topic][el.pros_cons].push(el.description)
+        } else {
+          gameObj[el.topic][el.pros_cons].push(el.description)
+        }
+      })
+      console.log(gameObj)
+
+      return {
+        ...state,
+        gameDetails: gameObj,
+        currentGame: action.payload.title
+      }
+
+
     case types.TOPIC:
-    return {
-      ...state,
-      topics: {
-        ...state.topics,
-        [action.payload]: true,
-      },
-    }
+      return {
+        ...state,
+        topics: {
+          ...state.topics,
+          [action.payload]: true,
+        },
+      }
     
 
     default:
