@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 };
 
 const GameRoom = (props) => {
-  console.log("GAME ROOM", props);
+  // console.log("GAME ROOM", props);
   const dispatch = useDispatch();
   const [speaker, setSpeaker] = useState(true);
   const [topicIndex, setTopicIndex] = useState(0);
@@ -20,15 +20,15 @@ const GameRoom = (props) => {
   const [gameStart, setGameStart] = useState(false);
   const [gameOver, setGameOver] = useState(false);
 
-  console.log("PROPS socket", props.socket);
+  // console.log("PROPS socket", props.socket);
 
   // NEED A TOPIC AND ITS PROS/CONS
   // RANDOMIZE THE TOPIC THAT SHOWS, SET 1MIN SET INTERVAL, invokes a setState method that grabs new topic to render
 
   useEffect(() => {
-    console.log("PROPS-useEffect", props);
+    // console.log("PROPS-useEffect", props);
     if (props.gameDetails) {
-      console.log("props.gameDetail", props.gameDetails);
+      // console.log("props.gameDetail", props.gameDetails);
       setTopicKeys(Object.keys(props.gameDetails));
       // setTopicIndex(0);
 
@@ -54,11 +54,11 @@ const GameRoom = (props) => {
   return (
     <div>
       <div>Game Room</div>
-      <button onClick={disconnecter}>disconnect</button>
+      <button className="button is-primary is-outlined is-light" onClick={disconnecter}>Leave Game</button>
       {(speaker && !gameStart) && (
         <>
           <div>YOU ARE THE SPEAKER</div>
-          <button onClick={startTime}>START THE TIMER!!!!</button>
+          <button className="button is-primary is-outlined is-light" onClick={startTime}>START THE TIMER!!!!</button>
         </>
       )}
       {(speaker && !gameOver) && (gameStart && (

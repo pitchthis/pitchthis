@@ -23,7 +23,7 @@ const App = () => {
             <Link to="/loggedIn">Enter Room</Link>
           </button>
           <button className="button is-primary is-outlined is-light">
-            <Link to="/gamebuilder">Make a Game</Link>
+            <Link to="/gamebuilder">Build a Game</Link>
           </button>
         </div>
       </nav>
