@@ -9,6 +9,7 @@ const jwtDecode = require("jwt-decode");
 const { createServer } = require("http");
 const socketio = require("socket.io");
 const server = createServer(app);
+const fetch = require('node-fetch')
 // const socker = require("./socker");
 const io = socketio(server);
 
@@ -126,26 +127,32 @@ io.on("connection", (socket) => {
 
     socket.emit("user-info", { name: person.name, index: currentRoom.players.length - 1, room });
     io.to(room).emit("current-players", currentRoom.players);
-  });
-  socket.on("some-button", (data) => {
-    console.log(data);
-    console.log("some button console", socket.id);
+    socket.on("start-pitching", ({id, title}) => {
+      console.log('starting????', id)
+      
+    const response = fetch(`http://localhost:3333/game/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        io.to(room).emit('okay-to-start', {data: res, title});
+      });
+    });
   });
 
-  socket.on('disconnect-me', () => {
+
+  socket.on('disconnect-me', (data) => {
     // reset game if one player leaves
-    // const roomNames = Object.keys(rooms);
-    // for (let i = 0; i < roomNames.length; i += 1) {
-    //   const roomPlayers = rooms[roomNames[i]].players;
-    //   for (let j = 0; j < roomPlayers.length; j += 1) {
-    //     if (roomPlayers[j].socketid === socket.id) {
-    //       console.log(roomPlayers[j])
-    //       delete rooms[roomNames[i]].players.roomPlayers[j];
-    //       return;
-    //     }
-    //   }
-    // }
-    socket.disconnect();
+    const roomNames = Object.keys(rooms);
+    for (let i = 0; i < roomNames.length; i += 1) {
+      const roomPlayers = rooms[roomNames[i]].players;
+      for (let j = 0; j < roomPlayers.length; j += 1) {
+        if (roomPlayers[j].socketid === socket.id) {
+          console.log(roomPlayers[j])
+          delete rooms[roomNames[i]].players.roomPlayers[j];
+          return;
+        }
+      }
+    }
+    // socket.disconnect();
   });
 });
 

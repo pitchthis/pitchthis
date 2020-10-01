@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import GameBuilder from "./GameBuilder";
 import { useDispatch, connect } from "react-redux";
 import * as types from "../constants/actionTypes";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import JoinRoom from "./JoinRoom";
 
 const mapStateToProps = (state) => {
@@ -14,6 +14,8 @@ const mapStateToProps = (state) => {
 const Lobby = (props) => {
   const [user, setUser] = useState({});
   const dispatch = useDispatch();
+  const history = useHistory();
+  
   const [roomEntered, setRoomEntered] = useState(false);
   const [games, setGames] = useState([]);
 
@@ -40,13 +42,24 @@ const Lobby = (props) => {
     });
   };
   // after joining... user info from backend
+  // useEffect(()=>{
+  
+  // }, [])
+
+  props.socket.on('okay-to-start', (data) => {
+    // console.log('starting-game!', data);
+    dispatch({ type: types.GAME_DETAILS, payload: { title: data.title, detail: data.data } });
+    history.push("/gameroom");
+  })
+
   props.socket.on("current-players", (player) => {
     playerUpdate(player);
   });
+ 
 
   const handleSubmit = (element, index) => {
     // Do a fetch to DB for the topics of this game, save said topics in the Store
-
+    console.log(index);
     fetch(`/game/${element.id}`)
       .then((res) => res.json())
       .then((res) => {
@@ -57,6 +70,14 @@ const Lobby = (props) => {
       });
     props.socket.emit("some-button", user.email);
     // Send the rout to gameRoom
+
+    // DISPATCH TO STORE SAYING - GO TO GAME ROOM
+    props.socket.emit('start-pitching', {id: element.id, title: element.game_title});
+
+    // dispatch({
+    //   type: types.GAME_ON,
+    // });
+
   };
   const gamers = props.players.map((person, i) => {
     return <p key={i}>{person.name}</p>;
@@ -69,8 +90,8 @@ const Lobby = (props) => {
           onClick={() => {
             handleSubmit(el, i);
           }}
-        >
-          <Link to="/gameroom">{el.game_title}</Link>
+        >{el.game_title}
+          {/* <Link to="/gameroom">{el.game_title}</Link> */}
         </button>
       </div>
     );

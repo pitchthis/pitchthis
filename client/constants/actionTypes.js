@@ -11,4 +11,4 @@ export const DELETE_CONS = 'DELETE_CONS';
 export const GAME_DETAILS = 'GAME_DETAILS';
 export const ADD_PLAYER = 'ADD_PLAYER';
 
-
+export const GAME_ON = 'GAME_ON';
