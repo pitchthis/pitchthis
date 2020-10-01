@@ -7,7 +7,7 @@ import * as types from '../constants/actionTypes';
 
 const mapStateToProps = state => {
   return { 
-    gameDetail: state.games.gameDetails, 
+    gameDetails: state.games.gameDetails, 
     currentGame: state.games.currentGame,
   }
 }
@@ -18,7 +18,7 @@ const GameRoom = (props) => {
   const dispatch = useDispatch()
   const [speaker, setSpeaker] = useState(false);
   const [topic, setTopic] = useState(0);
-  const [topicKeys, setTopicKeys] = useState({})
+  const [topicKeys, setTopicKeys] = useState([])
 
   
   console.log('PROPS', props)
@@ -29,8 +29,14 @@ const GameRoom = (props) => {
 
   useEffect(() => {
     console.log('PROPS-useEffect', props)
+    if (props.gameDetails) {
+      console.log('props.gameDetail', props.gameDetails)
+      setTopicKeys(Object.keys(props.gameDetails))
+      
+    }
+    
 
-  }, [props.gameDetail]);
+  }, [props.gameDetails]);
 
  
   
@@ -41,7 +47,7 @@ const GameRoom = (props) => {
       {speaker && 
         <>
         <div>YOU ARE THE SPEAKER</div>
-        <div>Current topic is : {props.gameDetail[topicKeys[topic]]}</div>
+        <div>Current topic is : {props.gameDetails[topicKeys[topic]]}</div>
         </>
       }
       
