@@ -11,6 +11,7 @@ const Lobby = ({ socket }) => {
   const dispatch = useDispatch();
   const [roomEntered, setRoomEntered] = useState(false);
   const [games, setGames] = useState([]);
+  const [players, setPlayers] = useState([]);
 
   useEffect(() => {
     fetch("/people")
@@ -24,11 +25,16 @@ const Lobby = ({ socket }) => {
       .then((res) => res.json())
       .then((res) => {
         setGames(res);
-        // console.log(res)
       });
   }, []);
 
-  // after joining... enter game
+  const playerUpdate = (users) => {
+    setPlayers([...users]);
+  };
+  // after joining... user info from backend
+  socket.on("current-players", (people) => {
+    playerUpdate(people);
+  });
 
   const handleSubmit = (element, index) => {
     // Do a fetch to DB for the topics of this game, save said topics in the Store
@@ -44,7 +50,9 @@ const Lobby = ({ socket }) => {
     socket.emit("some-button", user.email);
     // Send the rout to gameRoom
   };
-
+  const gamers = players.map((person, i) => {
+    return <p key={i}>{person.name}</p>;
+  });
   const gameArr = games.map((el, i) => {
     return (
       <div>
@@ -61,21 +69,25 @@ const Lobby = ({ socket }) => {
     );
   });
 
-  // if (!roomEntered) {
-  //   return <JoinRoom socket={socket} />;
-  // } else {
+  if (!roomEntered) {
+    return <JoinRoom socket={socket} setter={setRoomEntered} user={user} />;
+  } else {
     return (
       <div>
         <div class="columns">
-          <div class="column is-one-third">Welcome {user.name}!!</div>
-          <div class="column">
-            <div>Select a game to play:</div>
-            <div>{gameArr}</div>
+          <div class="column is-one-third" id="user_id">
+            Hello {user.name}!!
+            {gamers}
           </div>
+          <div class="column">
+            <div class="game_title">Select a game to play:</div>
+            <div class="game_title">{gameArr}</div>
+          </div>
+          <div class="column is-one-third" />
         </div>
       </div>
     );
-  // }
+  }
 };
 
 export default Lobby;

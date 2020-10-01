@@ -23,7 +23,6 @@ authController.oauth = (req, res, next) => {
 
 authController.onSuccess = async (req, res, next) => {
   if (req.query.code) {
-    console.log(req.query);
     const oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,

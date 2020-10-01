@@ -36,11 +36,31 @@
 @import "../../node_modules/bulma/sass/layout/hero.sass";
 @import "../../node_modules/bulma/sass/layout/section.sass";
 
-
-
 .fieldTopic {
-  margin-bottom: 50px
+  margin-bottom: 50px;
 }
-.button {
-padding-top: 10px
+
+#buttons_id {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.label {
+  margin: 20px;
+}
+
+#welcome {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+#user_id {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+}
+
+.game_title {
+  margin-top: 10px;
+  text-align: center;
 }
