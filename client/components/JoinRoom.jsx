@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const JoinRoom = ({socket}) => {
+const JoinRoom = ({ socket, setter, user }) => {
   const [room, setRoom] = useState("");
   const [go, setGo] = useState(false);
 
@@ -13,6 +13,7 @@ const JoinRoom = ({socket}) => {
   });
   const handleRoomClick = () => {
     console.log(room);
+    setter(true);
     socket.emit("new-room", { room, name: user.name });
   };
   return (
@@ -20,7 +21,10 @@ const JoinRoom = ({socket}) => {
       <label className="label">Enter Room Name:</label>
       <input className="input" type="text" placeholder="Text input" onChange={handleRoomInput} />
       <div className="control">
-        <button className="button is-primary" onClick={handleRoomClick}>
+        <button
+          className="button is-outlined is-primary is-light is-medium is-fullwidth"
+          onClick={handleRoomClick}
+        >
           <Link to="/loggedIn">Join Game!</Link>
         </button>
       </div>
