@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import GameBuilder from "./GameBuilder";
-import io from "socket.io-client";
 
-const socket = io.connect("http://localhost:3334");
-
-const GameContainer = () => {
+const GameContainer = ({ socket }) => {
   const players = ["bonjay", "aryeh", "stan", "liz", "patrick"];
   const [currentPlayer, setCurrentPlayer] = useState(players[0]);
   const store = {
@@ -23,9 +20,6 @@ const GameContainer = () => {
       },
     },
   };
-  socket.on("message", (data) => {
-    console.log("hi stan");
-  });
 
   // fetch land to people first... then to games which loads all games
   // dispatch to store to store all games

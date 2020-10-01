@@ -100,16 +100,23 @@ const rooms = {};
 const playersArray = [];
 io.on("connection", (socket) => {
   console.log(socket.id);
-  socket.emit("message");
+  socket.emit("message", socket.id);
   socket.on("join", (players) => {
     console.log(players);
-    console.log(playersArray);
+  });
+  socket.on("new-room", (room) => {
+    console.log(room);
+    socket.join(room);
+  });
+  socket.on("some-button", (data) => {
+    console.log(data);
+    console.log("some button console", socket.id);
   });
 });
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);
 });
-server.listen(Number(PORT) + 1, () => {
+server.listen(+PORT + 1, () => {
   console.log(`Api and socker whitelisted for BONJAY`);
 });
