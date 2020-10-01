@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import GameBuilder from "./GameBuilder";
-import { useDispatch } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import * as types from "../constants/actionTypes";
 import { Link } from "react-router-dom";
 import JoinRoom from "./JoinRoom";
 
-const Lobby = ({ socket }) => {
+const mapStateToProps = (state) => {
+  console.log(state.games);
+  return { players: state.games.players };
+};
+
+const Lobby = (props) => {
   const [user, setUser] = useState({});
   const dispatch = useDispatch();
   const [roomEntered, setRoomEntered] = useState(false);
   const [games, setGames] = useState([]);
-  const [players, setPlayers] = useState([]);
+
 
   useEffect(() => {
     fetch("/people")
@@ -28,12 +33,15 @@ const Lobby = ({ socket }) => {
       });
   }, []);
 
-  const playerUpdate = (users) => {
-    setPlayers([...users]);
+  const playerUpdate = (player) => {
+    dispatch({
+      type: types.ADD_PLAYER,
+      payload: player,
+    });
   };
   // after joining... user info from backend
-  socket.on("current-players", (people) => {
-    playerUpdate(people);
+  props.socket.on("current-players", (player) => {
+    playerUpdate(player);
   });
 
   const handleSubmit = (element, index) => {
@@ -47,16 +55,15 @@ const Lobby = ({ socket }) => {
         dispatch({ type: types.GAME_DETAILS, payload: { title: element.game_title, detail: res } });
         // REDIRECT TO THE GAMEROOM
       });
-    socket.emit("some-button", user.email);
+    props.socket.emit("some-button", user.email);
     // Send the rout to gameRoom
   };
-  const gamers = players.map((person, i) => {
+  const gamers = props.players.map((person, i) => {
     return <p key={i}>{person.name}</p>;
   });
   const gameArr = games.map((el, i) => {
     return (
       <div>
-        <h3>{el.game_title}</h3>
         <button
           className="button is-outlined is-primary is-light is-medium is-fullwidth"
           onClick={() => {
@@ -70,24 +77,24 @@ const Lobby = ({ socket }) => {
   });
 
   if (!roomEntered) {
-    return <JoinRoom socket={socket} setter={setRoomEntered} user={user} />;
+    return <JoinRoom socket={props.socket} setter={setRoomEntered} user={user} />;
   } else {
     return (
       <div>
-        <div class="columns">
-          <div class="column is-one-third" id="user_id">
+        <div className="columns">
+          <div className="column is-one-third" id="user_id">
             Hello {user.name}!!
             {gamers}
           </div>
-          <div class="column">
-            <div class="game_title">Select a game to play:</div>
-            <div class="game_title">{gameArr}</div>
+          <div className="column">
+            <div className="game_title">Select a game to play:</div>
+            <div className="game_title">{gameArr}</div>
           </div>
-          <div class="column is-one-third" />
+          <div className="column is-one-third" />
         </div>
       </div>
     );
   }
 };
 
-export default Lobby;
+export default connect(mapStateToProps)(Lobby);
