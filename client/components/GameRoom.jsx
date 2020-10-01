@@ -34,61 +34,19 @@ const GameRoom = (props) => {
     }
   }, [props.gameDetails]);
 
-  // useEffect(() => {
-  //   // topicKeys will have 'React' etc
-  //   // generated a random value and set
-  //   // if (topicKeys[topicIndex] !== undefined) {
-  //   if (topicIndex < topicKeys.length + 1) {
-  //     setTimeout(() => {
-  //       setTopicIndex(topicIndex + 1);
-  //     }, 5000);
-  //   }
-
-  //   // }
-  // }, [topicIndex]);
-
-  // const miniFunc = () => {
-  //   setTimeout(()=>{
-  //     setGameOver(true)}, 10000
-  //   )
-  // }
 
   const startTime = () => {
     setGameStart(true);
-    // if (topicIndex === false) {
-    //   setTopicIndex(-1);
-    // }
-    // setTimeout(()=>{
-    //   setTopicIndex(topicIndex + 1), 5000
-    // })
+  
     const random = Math.floor(Math.random()*(topicKeys.length-1))
     setTopicIndex(random)
 
-   
     setTimeout(()=>{
       setGameStart(false)}, 5000
     )  
-    // console.log('topicIndex', topicIndex)
-
-    // let newIndex = topicIndex;
-
-    // if (topicIndex === 0) {
-    //   setTimeout(()=>{
-    //     setTopicIndex(newIndex + 1)
-    //     startTime()
-    //   }, 3000)
-    // } else {
-    //   setTopicIndex(5)
-    //   setTimeout(startTime, 3000)
-    // }
   };
 
-  // useEffect(()=>{
-  //   console.log(topicIndex)
-  //   setTimeout(()=>{
-  //     setTopicIndex(topicIndex + 1), 3000
-  //   })
-  // }, [topicIndex])
+
 
   return (
     <div>
@@ -105,7 +63,7 @@ const GameRoom = (props) => {
           <div>{topicKeys[topicIndex]}</div>
         </>
       ))}
-      {(speaker && gameOver) && (gameStart && <div>End Round!!!</div>)}
+      {/* {(speaker && gameOver) && (gameStart && <div>End Round!!!</div>)} */}
 
 
 
