@@ -61,9 +61,9 @@ const Lobby = ({ socket }) => {
     );
   });
 
-  if (!roomEntered) {
-    return <JoinRoom socket={socket}/>;
-  } else {
+  // if (!roomEntered) {
+  //   return <JoinRoom socket={socket} />;
+  // } else {
     return (
       <div>
         <div class="columns">
@@ -75,7 +75,7 @@ const Lobby = ({ socket }) => {
         </div>
       </div>
     );
-  }
+  // }
 };
 
 export default Lobby;
