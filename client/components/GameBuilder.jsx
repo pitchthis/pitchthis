@@ -1,7 +1,7 @@
-import React, { useState, useEffect, Component } from "react";
-import { useDispatch, connect } from "react-redux";
-import * as types from "../constants/actionTypes";
-import TopicBuilder from "./TopicBuilder";
+import React, { useState, useEffect, Component } from 'react';
+import { useDispatch, connect } from 'react-redux';
+import * as types from '../constants/actionTypes';
+import TopicBuilder from './TopicBuilder';
 
 const mapStateToProps = (state) => {
   console.log(state);
@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
 // });
 // if store incremented by one, add topic builder
 const GameBuilder = () => {
-  const [gameTitle, setGameTitle] = useState("");
+  const [gameTitle, setGameTitle] = useState('');
 
   // constructor(props) {
   //   super(props);
@@ -57,12 +57,7 @@ const GameBuilder = () => {
       <div className="field">
         <label className="label">Game Title:</label>
         <div className="control">
-          <input
-            onChange={handleChange}
-            className="input"
-            type="text"
-            placeholder="Text input"
-          />
+          <input onChange={handleChange} className="input" type="text" placeholder="Text input" />
         </div>
       </div>
       <div id="topicContainer">{topicArray}</div>

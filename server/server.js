@@ -1,20 +1,20 @@
-const express = require("express");
-const path = require("path");
+const express = require('express');
+const path = require('path');
 const PORT = 3333;
 const app = express();
-const cookieParser = require("cookie-parser");
-const authController = require("./controllers/authController");
-const cookieController = require("./controllers/cookieController");
-const jwtDecode = require("jwt-decode");
-const { createServer } = require("http");
-const socketio = require("socket.io");
+const cookieParser = require('cookie-parser');
+const authController = require('./controllers/authController');
+const cookieController = require('./controllers/cookieController');
+const jwtDecode = require('jwt-decode');
+const { createServer } = require('http');
+const socketio = require('socket.io');
 const server = createServer(app);
-const fetch = require('node-fetch')
+const fetch = require('node-fetch');
 // const socker = require("./socker");
 const io = socketio(server);
 
-const gamesController = require("./controllers/gamesController");
-require("dotenv").config();
+const gamesController = require('./controllers/gamesController');
+require('dotenv').config();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -22,45 +22,44 @@ app.use(cookieParser());
 /*
  * Server Static files
  */
-app.use("/build", express.static(path.join(__dirname, "../build")));
+app.use('/build', express.static(path.join(__dirname, '../build')));
 
 /*
  * Routes/Endpoints
  */
 
-app.get("/login", authController.oauth, (req, res) => {
+app.get('/login', authController.oauth, (req, res) => {
   return res.redirect(res.locals.url);
 });
 
-app.get("/loggedIn", cookieController.hasCookie, (req, res) => {
+app.get('/loggedIn', cookieController.hasCookie, (req, res) => {
   // add middleware to check for SSID cookie
-  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
+  res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
-app.get("/gameroom", cookieController.hasCookie, (req, res) => {
+app.get('/gameroom', cookieController.hasCookie, (req, res) => {
   // add middleware to check for SSID cookie
-  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
+  res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
-
-app.get("/people", (req, res) => {
+app.get('/people', (req, res) => {
   const { email, name, picture } = jwtDecode(req.cookies.user);
   res.send({ email, name, picture });
 });
 
-app.get("/game/:id", gamesController.getTopics, (req, res) => {
+app.get('/game/:id', gamesController.getTopics, (req, res) => {
   res.status(200).json(res.locals.topics);
 });
 
-app.get("/game", gamesController.getGames, (req, res) => {
+app.get('/game', gamesController.getGames, (req, res) => {
   res.status(200).json(res.locals.games);
 });
 
-app.post("/game", gamesController.createGame, gamesController.createTopics, (req, res) => {
-  res.status(200).send("Game created...");
+app.post('/game', gamesController.createGame, gamesController.createTopics, (req, res) => {
+  res.status(200).send('Game created...');
 });
 
-app.get("/game/:id", gamesController.getTopics, (req, res) => {
+app.get('/game/:id', gamesController.getTopics, (req, res) => {
   res.status(200).json(res.locals.topics);
 });
 
@@ -68,18 +67,18 @@ app.get("/game/:id", gamesController.getTopics, (req, res) => {
 --------- OAuth Success Handler ---------
  ****************************************/
 app.get(
-  "/success",
+  '/success',
   authController.onSuccess,
   // add middleware to see if user is in database, if not, add them
   cookieController.setSSIDcookie,
   (req, res) => {
     // redirect to a page that will then check if there is an SSID cookie called 'user' ()
-    res.status(200).redirect("/loggedIn");
+    res.status(200).redirect('/loggedIn');
   }
 );
 
-app.get("/", (req, res) => {
-  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
+app.get('/', (req, res) => {
+  res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
 // 404 handler
@@ -91,7 +90,7 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.log(err);
   const errorStatus = err.status || 500;
-  return res.status(errorStatus).send("INTERNAL SERVER ERROR");
+  return res.status(errorStatus).send('INTERNAL SERVER ERROR');
 });
 
 /**********************************************************************
@@ -100,10 +99,10 @@ app.use((err, req, res, next) => {
 
 const rooms = {};
 const playersArray = [];
-io.on("connection", (socket) => {
+io.on('connection', (socket) => {
   console.log(socket.id);
-  socket.emit("message", socket.id);
-  socket.on("new-room", ({ room, name }) => {
+  socket.emit('message', socket.id);
+  socket.on('new-room', ({ room, name }) => {
     console.log(room, name);
     socket.join(room);
 
@@ -123,21 +122,20 @@ io.on("connection", (socket) => {
 
     currentRoom.players.push(person);
     console.log(currentRoom.players);
-    socket.emit("enter-game");
+    socket.emit('enter-game');
 
-    socket.emit("user-info", { name: person.name, index: currentRoom.players.length - 1, room });
-    io.to(room).emit("current-players", currentRoom.players);
-    socket.on("start-pitching", ({id, title}) => {
-      console.log('starting????', id)
-      
-    const response = fetch(`http://localhost:3333/game/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        io.to(room).emit('okay-to-start', {data: res, title});
-      });
+    socket.emit('user-info', { name: person.name, index: currentRoom.players.length - 1, room });
+    io.to(room).emit('current-players', currentRoom.players);
+    socket.on('start-pitching', ({ id, title }) => {
+      console.log('starting????', id);
+
+      const response = fetch(`http://localhost:3333/game/${id}`)
+        .then((res) => res.json())
+        .then((res) => {
+          io.to(room).emit('okay-to-start', { data: res, title });
+        });
     });
   });
-
 
   socket.on('disconnect-me', (data) => {
     // reset game if one player leaves
@@ -146,7 +144,7 @@ io.on("connection", (socket) => {
       const roomPlayers = rooms[roomNames[i]].players;
       for (let j = 0; j < roomPlayers.length; j += 1) {
         if (roomPlayers[j].socketid === socket.id) {
-          console.log(roomPlayers[j])
+          console.log(roomPlayers[j]);
           delete rooms[roomNames[i]].players.roomPlayers[j];
           return;
         }
@@ -155,8 +153,6 @@ io.on("connection", (socket) => {
     // socket.disconnect();
   });
 });
-
-
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);

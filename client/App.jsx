@@ -1,15 +1,15 @@
-import React from "react";
-import { connect } from "react-redux";
-import Login from "./components/Login";
-import GameContainer from "./components/GameContainer";
-import Lobby from "./components/Lobby";
-import GameRoom from "./components/GameRoom";
+import React from 'react';
+import { connect } from 'react-redux';
+import Login from './components/Login';
+import GameContainer from './components/GameContainer';
+import Lobby from './components/Lobby';
+import GameRoom from './components/GameRoom';
 
-import { Switch, Route, Link } from "react-router-dom";
-import "./assets/styles.scss";
-import io from "socket.io-client";
+import { Switch, Route, Link } from 'react-router-dom';
+import './assets/styles.scss';
+import io from 'socket.io-client';
 
-const socket = io.connect("http://localhost:3334");
+const socket = io.connect('http://localhost:3334');
 const App = () => {
   return (
     <main>
@@ -35,7 +35,7 @@ const App = () => {
           socket={socket}
           component={() => <GameContainer socket={socket} />}
         />
-        <Route path="/gameroom" component={() => <GameRoom socket={socket}/>} />
+        <Route path="/gameroom" component={() => <GameRoom socket={socket} />} />
 
         <Route path="/" component={() => <Login socket={socket} />} exact />
       </Switch>
