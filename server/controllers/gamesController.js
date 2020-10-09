@@ -53,7 +53,7 @@ module.exports = {
   },
 
   async createTopics(req, res, next) {
-    console.log('in createTopics ')
+    console.log('in createTopics ');
     const game_title = Object.keys(req.body)[0];
     const topicName = Object.keys(req.body[game_title]);
 

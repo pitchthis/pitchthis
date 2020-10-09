@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const JoinRoom = ({ socket, setter, user }) => {
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState('');
   const [go, setGo] = useState(false);
 
   const handleRoomInput = (e) => {
     setRoom(e.target.value);
   };
-  socket.on("enter-game", () => {
+  socket.on('enter-game', () => {
     setGo(true);
   });
   const handleRoomClick = () => {
     console.log(room);
     setter(true);
-    socket.emit("new-room", { room, name: user.name });
+    socket.emit('new-room', { room, name: user.name });
   };
   return (
     <>

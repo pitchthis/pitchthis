@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import GameBuilder from "./GameBuilder";
-import { useDispatch, connect } from "react-redux";
-import * as types from "../constants/actionTypes";
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import GameBuilder from './GameBuilder';
+import { useDispatch, connect } from 'react-redux';
+import * as types from '../constants/actionTypes';
 
 const mapStateToProps = (state) => {
   return {
@@ -31,50 +31,47 @@ const GameRoom = (props) => {
       // console.log("props.gameDetail", props.gameDetails);
       setTopicKeys(Object.keys(props.gameDetails));
       // setTopicIndex(0);
-
     }
   }, [props.gameDetails]);
 
-
   const startTime = () => {
     setGameStart(true);
-  
-    const random = Math.floor(Math.random()*(topicKeys.length-1))
-    setTopicIndex(random)
 
-    setTimeout(()=>{
-      setGameStart(false)}, 5000
-    )  
+    const random = Math.floor(Math.random() * (topicKeys.length - 1));
+    setTopicIndex(random);
+
+    setTimeout(() => {
+      setGameStart(false);
+    }, 5000);
   };
 
   const disconnecter = () => {
     props.socket.emit('disconnect-me');
-  }
+  };
 
   return (
     <div>
       <div>Game Room</div>
-      <button className="button is-primary is-outlined is-light" onClick={disconnecter}>Leave Game</button>
-      {(speaker && !gameStart) && (
+      <button className="button is-primary is-outlined is-light" onClick={disconnecter}>
+        Leave Game
+      </button>
+      {speaker && !gameStart && (
         <>
           <div>YOU ARE THE SPEAKER</div>
-          <button className="button is-primary is-outlined is-light" onClick={startTime}>START THE TIMER!!!!</button>
+          <button className="button is-primary is-outlined is-light" onClick={startTime}>
+            START THE TIMER!!!!
+          </button>
         </>
       )}
-      {(speaker && !gameOver) && (gameStart && (
+      {speaker && !gameOver && gameStart && (
         <>
           <div>Current topic is:</div>
           <div>{topicKeys[topicIndex]}</div>
         </>
-      ))}
+      )}
       {/* {(speaker && gameOver) && (gameStart && <div>End Round!!!</div>)} */}
 
-
-
-      {!speaker && (
-        <div>YOU ARE THE AUDIENCE</div>
-      )}
-  
+      {!speaker && <div>YOU ARE THE AUDIENCE</div>}
     </div>
   );
 };

@@ -1,6 +1,6 @@
-const { google } = require("googleapis");
-const jwtDecode = require("jwt-decode");
-require("dotenv").config();
+const { google } = require('googleapis');
+const jwtDecode = require('jwt-decode');
+require('dotenv').config();
 
 const authController = {};
 
@@ -10,7 +10,7 @@ authController.oauth = (req, res, next) => {
     process.env.GOOGLE_CLIENT_SECRET,
     process.env.GOOGLE_REDIRECT
   );
-  const scopes = ["email", "profile"];
+  const scopes = ['email', 'profile'];
 
   const url = oauth2Client.generateAuthUrl({
     scope: scopes,
@@ -39,7 +39,7 @@ authController.onSuccess = async (req, res, next) => {
     res.locals.person = person;
     return next();
   } else {
-    res.send("Please login");
+    res.send('Please login');
   }
 };
 module.exports = authController;

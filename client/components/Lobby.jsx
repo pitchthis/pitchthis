@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import GameBuilder from "./GameBuilder";
-import { useDispatch, connect } from "react-redux";
-import * as types from "../constants/actionTypes";
-import { Link, useHistory } from "react-router-dom";
-import JoinRoom from "./JoinRoom";
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import GameBuilder from './GameBuilder';
+import { useDispatch, connect } from 'react-redux';
+import * as types from '../constants/actionTypes';
+import { Link, useHistory } from 'react-router-dom';
+import JoinRoom from './JoinRoom';
 
 const mapStateToProps = (state) => {
   console.log(state.games);
@@ -15,20 +15,19 @@ const Lobby = (props) => {
   const [user, setUser] = useState({});
   const dispatch = useDispatch();
   const history = useHistory();
-  
+
   const [roomEntered, setRoomEntered] = useState(false);
   const [games, setGames] = useState([]);
 
-
   useEffect(() => {
-    fetch("/people")
+    fetch('/people')
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
         setUser(res);
       });
 
-    fetch("/game")
+    fetch('/game')
       .then((res) => res.json())
       .then((res) => {
         setGames(res);
@@ -43,19 +42,18 @@ const Lobby = (props) => {
   };
   // after joining... user info from backend
   // useEffect(()=>{
-  
+
   // }, [])
 
   props.socket.on('okay-to-start', (data) => {
     // console.log('starting-game!', data);
     dispatch({ type: types.GAME_DETAILS, payload: { title: data.title, detail: data.data } });
-    history.push("/gameroom");
-  })
+    history.push('/gameroom');
+  });
 
-  props.socket.on("current-players", (player) => {
+  props.socket.on('current-players', (player) => {
     playerUpdate(player);
   });
- 
 
   const handleSubmit = (element, index) => {
     // Do a fetch to DB for the topics of this game, save said topics in the Store
@@ -63,21 +61,20 @@ const Lobby = (props) => {
     fetch(`/game/${element.id}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log("Game detail", res);
+        console.log('Game detail', res);
         // DISPATCH RESPONSE TO THE STORE
         dispatch({ type: types.GAME_DETAILS, payload: { title: element.game_title, detail: res } });
         // REDIRECT TO THE GAMEROOM
       });
-    props.socket.emit("some-button", user.email);
+    props.socket.emit('some-button', user.email);
     // Send the rout to gameRoom
 
     // DISPATCH TO STORE SAYING - GO TO GAME ROOM
-    props.socket.emit('start-pitching', {id: element.id, title: element.game_title});
+    props.socket.emit('start-pitching', { id: element.id, title: element.game_title });
 
     // dispatch({
     //   type: types.GAME_ON,
     // });
-
   };
   const gamers = props.players.map((person, i) => {
     return <p key={i}>{person.name}</p>;
@@ -90,7 +87,8 @@ const Lobby = (props) => {
           onClick={() => {
             handleSubmit(el, i);
           }}
-        >{el.game_title}
+        >
+          {el.game_title}
           {/* <Link to="/gameroom">{el.game_title}</Link> */}
         </button>
       </div>
